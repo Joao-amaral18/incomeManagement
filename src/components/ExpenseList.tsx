@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { ExpenseForm } from './ExpenseForm'
 
 export function ExpenseList() {
-  const { expenses, getExpensesByCategory, deleteExpense, toggleExpenseActive, markAsPaid, unmarkAsPaid, isPaidThisMonth } = useExpenseStore()
+  const { expenses, getExpensesByCategory, deleteExpense, markAsPaid, unmarkAsPaid, isPaidThisMonth } = useExpenseStore()
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   

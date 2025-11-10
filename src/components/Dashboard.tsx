@@ -1,10 +1,10 @@
 import { useExpenseStore } from '../store/expenseStore'
-import { formatCurrency, getCategoryLabel, getCategoryIcon, getDaysUntilDue } from '../lib/utils'
+import { formatCurrency, getCategoryLabel, getDaysUntilDue } from '../lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
-import { TrendingUp, Calendar, AlertCircle } from 'lucide-react'
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
+import { TrendingUp, Calendar } from 'lucide-react'
 import { useState } from 'react'
 import { ExpenseForm } from './ExpenseForm'
 

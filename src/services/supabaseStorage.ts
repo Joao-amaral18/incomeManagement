@@ -41,8 +41,6 @@ export async function ensureBucket(): Promise<boolean> {
     if (listError) {
       console.error('Error listing buckets:', {
         message: listError.message,
-        statusCode: listError.statusCode,
-        error: listError
       })
       // If we can't list buckets, we can't verify if it exists
       // Return true to allow trying operations (they will fail with better error messages)
@@ -55,7 +53,7 @@ export async function ensureBucket(): Promise<boolean> {
       console.log(`Bucket '${BUCKET_NAME}' does not exist. Attempting to create...`)
       
       // Create bucket if it doesn't exist
-      const { data: bucketData, error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
+      const { error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
         public: false, // Private bucket
         fileSizeLimit: 10485760, // 10MB limit
         allowedMimeTypes: ['application/json']
@@ -64,8 +62,6 @@ export async function ensureBucket(): Promise<boolean> {
       if (createError) {
         console.error('Error creating bucket:', {
           message: createError.message,
-          statusCode: createError.statusCode,
-          error: createError
         })
         console.warn('⚠️ You may need to create the bucket manually in Supabase Dashboard > Storage')
         return false
@@ -107,7 +103,7 @@ export async function saveToSupabaseStorage(userId: string, data: any): Promise<
     const fileContent = JSON.stringify(data)
     const blob = new Blob([fileContent], { type: 'application/json' })
 
-    const { data: uploadData, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(BUCKET_NAME)
       .upload(filePath, blob, {
         upsert: true,
@@ -118,14 +114,12 @@ export async function saveToSupabaseStorage(userId: string, data: any): Promise<
       // Log detailed error for debugging
       console.error('Error saving to Supabase Storage:', {
         message: error.message,
-        statusCode: error.statusCode,
-        error: error,
         filePath,
         bucket: BUCKET_NAME
       })
       
       // If it's a permission error, suggest checking RLS policies
-      if (error.statusCode === '400' || error.message?.includes('permission') || error.message?.includes('policy')) {
+      if (error.message?.includes('permission') || error.message?.includes('policy')) {
         console.warn('⚠️ Permission error. Make sure RLS policies are configured in Supabase Storage.')
         console.warn('Go to Supabase Dashboard > Storage > Policies and add policies for the bucket.')
       }
@@ -172,12 +166,9 @@ export async function loadFromSupabaseStorage(userId: string): Promise<any | nul
       // File doesn't exist yet, return null (this is normal for first use)
       // Check for 404 in multiple ways
       const isNotFound = 
-        error.statusCode === '404' || 
-        error.statusCode === 404 ||
         error.message?.includes('404') || 
         error.message?.includes('not found') ||
-        error.message?.includes('Not Found') ||
-        error.error === 'not_found'
+        error.message?.includes('Not Found')
       
       if (isNotFound) {
         // Silently return null for 404 - this is expected for new users
@@ -187,14 +178,12 @@ export async function loadFromSupabaseStorage(userId: string): Promise<any | nul
       // Log detailed error for debugging (only for real errors, not 404)
       console.error('Error loading from Supabase Storage:', {
         message: error.message,
-        statusCode: error.statusCode,
-        error: error.error,
         filePath,
         bucket: BUCKET_NAME
       })
       
       // If it's a permission error, suggest checking RLS policies
-      if (error.statusCode === '400' || error.statusCode === 400 || error.message?.includes('permission') || error.message?.includes('policy')) {
+      if (error.message?.includes('permission') || error.message?.includes('policy')) {
         console.warn('⚠️ Permission error. Make sure RLS policies are configured in Supabase Storage.')
         console.warn('Go to Supabase Dashboard > Storage > Policies and add policies for the bucket.')
         console.warn('See README.md or create policies that allow authenticated users to read/write their own files.')

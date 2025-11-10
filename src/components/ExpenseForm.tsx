@@ -19,7 +19,7 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     value: '',
-    dueDay: '',
+    dueDate: '',
     category: 'outros' as Category,
     paymentMethod: '',
     notes: '',
@@ -29,10 +29,24 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
 
   useEffect(() => {
     if (expense) {
+      // Convert dueDay (1-31) to a date string (YYYY-MM-DD format with current/next month)
+      let dueDateString = ''
+      if (expense.dueDay) {
+        const today = new Date()
+        let dueDate = new Date(today.getFullYear(), today.getMonth(), expense.dueDay)
+        
+        // If the day has passed this month, use next month
+        if (dueDate < today) {
+          dueDate = new Date(today.getFullYear(), today.getMonth() + 1, expense.dueDay)
+        }
+        
+        dueDateString = dueDate.toISOString().split('T')[0]
+      }
+      
       setFormData({
         name: expense.name,
         value: expense.value.toString(),
-        dueDay: expense.dueDay.toString(),
+        dueDate: dueDateString,
         category: expense.category,
         paymentMethod: expense.paymentMethod || '',
         notes: expense.notes || '',
@@ -43,7 +57,7 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
       setFormData({
         name: '',
         value: '',
-        dueDay: '',
+        dueDate: '',
         category: 'outros',
         paymentMethod: '',
         notes: '',
@@ -56,10 +70,20 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Generate an ID for name if not provided
+    const nameValue = formData.name.trim() || `Expense-${Date.now().toString(36)}`
+    
+    // Extract day from dueDate if provided
+    let dueDay: number | undefined
+    if (formData.dueDate) {
+      const date = new Date(formData.dueDate)
+      dueDay = date.getDate()
+    }
+    
     const expenseData = {
-      name: formData.name,
+      name: nameValue,
       value: parseFloat(formData.value),
-      dueDay: parseInt(formData.dueDay),
+      dueDay: dueDay,
       category: formData.category,
       paymentMethod: formData.paymentMethod || undefined,
       notes: formData.notes || undefined,
@@ -85,12 +109,11 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-xs font-medium mb-1.5">Name *</label>
+            <label className="block text-xs font-medium mb-1.5">Name</label>
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              placeholder="e.g., Netflix"
+              placeholder="e.g., Netflix (optional - will generate ID if empty)"
             />
           </div>
 
@@ -108,15 +131,12 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium mb-1.5">Due Day (1-31) *</label>
+            <label className="block text-xs font-medium mb-1.5">Due Date</label>
             <Input
-              type="number"
-              min="1"
-              max="31"
-              value={formData.dueDay}
-              onChange={(e) => setFormData({ ...formData, dueDay: e.target.value })}
-              required
-              placeholder="15"
+              type="date"
+              value={formData.dueDate}
+              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+              placeholder="Select a due date (optional)"
             />
           </div>
 

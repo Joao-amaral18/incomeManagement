@@ -10,7 +10,7 @@ export interface Expense {
   id: string;
   name: string;
   value: number;
-  dueDay: number; // 1-31
+  dueDay?: number; // 1-31
   category: Category;
   paymentMethod?: string;
   notes?: string;

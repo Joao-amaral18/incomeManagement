@@ -36,7 +36,10 @@ export function getCategoryIcon(category: string): string {
   return icons[category] || '📦'
 }
 
-export function getDaysUntilDue(dueDay: number): number {
+export function getDaysUntilDue(dueDay: number | undefined): number {
+  if (dueDay === undefined || dueDay === null) {
+    return 9999; // Retorna um número grande para despesas sem data de vencimento
+  }
   const today = new Date()
   const currentDay = today.getDate()
   const currentMonth = today.getMonth()

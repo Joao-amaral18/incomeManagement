@@ -6,20 +6,21 @@ import { ExpenseList } from './components/ExpenseList'
 import { AIAnalysis } from './components/AIAnalysis'
 import { Notifications } from './components/Notifications'
 import { IncomeManager } from './components/IncomeManager'
+import { PurchasePlanner } from './features/purchase-planner/PurchasePlanner'
 import { Auth } from './components/Auth'
 import { Button } from './components/ui/button'
-import { Moon, Sun, Home, List, Sparkles, Bell, DollarSign } from 'lucide-react'
+import { Moon, Sun, Home, List, Sparkles, Bell, DollarSign, Target } from 'lucide-react'
 
 function App() {
   const { user } = useUser()
   const { loadFromStorage, setUserId, darkMode, toggleDarkMode, notifications } = useExpenseStore()
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'expenses' | 'income' | 'ai' | 'notifications'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'expenses' | 'income' | 'ai' | 'notifications' | 'planner'>('dashboard')
   const unreadNotifications = notifications.filter((n) => !n.read).length
 
   useEffect(() => {
     // Update userId in store when user changes
     setUserId(user?.id || null)
-    
+
     // Load data from storage
     if (user?.id) {
       loadFromStorage(user.id)
@@ -108,6 +109,14 @@ function App() {
                 </span>
               )}
             </Button>
+            <Button
+              variant={activeTab === 'planner' ? 'default' : 'ghost'}
+              onClick={() => setActiveTab('planner')}
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary"
+            >
+              <Target className="h-4 w-4" />
+              <span className="hidden sm:inline">Planejador</span>
+            </Button>
           </div>
         </div>
       </nav>
@@ -119,6 +128,7 @@ function App() {
             {activeTab === 'income' && <IncomeManager />}
             {activeTab === 'ai' && <AIAnalysis />}
             {activeTab === 'notifications' && <Notifications />}
+            {activeTab === 'planner' && <PurchasePlanner />}
           </main>
 
           {/* Footer */}

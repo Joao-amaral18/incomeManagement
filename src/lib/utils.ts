@@ -44,17 +44,17 @@ export function getDaysUntilDue(dueDay: number | undefined): number {
   const currentDay = today.getDate()
   const currentMonth = today.getMonth()
   const currentYear = today.getFullYear()
-  
+
   let dueDate = new Date(currentYear, currentMonth, dueDay)
-  
+
   // Se o dia de vencimento já passou este mês, considerar o próximo mês
   if (dueDay < currentDay) {
     dueDate = new Date(currentYear, currentMonth + 1, dueDay)
   }
-  
+
   const diffTime = dueDate.getTime() - today.getTime()
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  
+
   return diffDays
 }
 
@@ -63,13 +63,44 @@ export function getNextDueDate(dueDay: number): Date {
   const currentDay = today.getDate()
   const currentMonth = today.getMonth()
   const currentYear = today.getFullYear()
-  
+
   let dueDate = new Date(currentYear, currentMonth, dueDay)
-  
+
   if (dueDay < currentDay) {
     dueDate = new Date(currentYear, currentMonth + 1, dueDay)
   }
-  
+
   return dueDate
+}
+
+export function addMonths(date: Date, months: number): Date {
+  const result = new Date(date)
+  result.setMonth(result.getMonth() + months)
+  return result
+}
+
+export function formatMonthYear(date: Date): string {
+  return new Intl.DateTimeFormat('pt-BR', {
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
+}
+
+export function formatMonthYearFull(date: Date): string {
+  return new Intl.DateTimeFormat('pt-BR', {
+    month: 'long',
+    year: 'numeric'
+  }).format(date)
+}
+
+export function getMonthKey(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${year}-${month}`
+}
+
+export function parseMonthKey(monthKey: string): Date {
+  const [year, month] = monthKey.split('-').map(Number)
+  return new Date(year, month - 1, 1)
 }
 

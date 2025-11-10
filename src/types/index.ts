@@ -1,4 +1,4 @@
-export type Category = 
+export type Category =
   | 'assinaturas'
   | 'educacao'
   | 'moradia'
@@ -71,5 +71,73 @@ export interface Income {
   source: string;
   month: string; // YYYY-MM
   createdAt: string;
+}
+
+// Purchase Planner Types
+export interface PurchaseGoal {
+  id: string;
+  item: string;
+  description?: string;
+  targetAmount: number;
+  monthlySaving: number;
+  currentSaved: number;
+  startDate: string;
+  estimatedEndDate: string;
+  status: 'active' | 'completed' | 'paused' | 'cancelled';
+  priority: 'high' | 'medium' | 'low';
+  category: string; // 'eletrônicos', 'viagem', 'carro', etc
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MonthlyBreakdown {
+  month: string; // "2024-11"
+  monthLabel: string; // "Nov/2024"
+  plannedAmount: number;
+  cumulativeTotal: number;
+  percentComplete: number;
+}
+
+export interface SavingsPlan {
+  item: string;
+  targetAmount: number;
+  monthsNeeded: number;
+  monthlySaving: number;
+  startDate: Date;
+  endDate: Date;
+  breakdown: MonthlyBreakdown[];
+  monthlySurplus: number;
+  suggestedSaving: number;
+}
+
+export interface SavingsProgress {
+  goalId: string;
+  month: string; // "2024-11"
+  plannedAmount: number;
+  actualAmount: number;
+  cumulativeTotal: number;
+  percentComplete: number;
+  onTrack: boolean;
+}
+
+export interface PurchaseGoalAIAnalysis {
+  goalId: string;
+  viability: {
+    isRealistic: boolean;
+    successProbability: number;
+    risks: string[];
+    reasoning: string;
+    suggestedAmount?: number;
+    alternatives?: string[];
+  };
+  accelerationOptions: {
+    scenario: 'light' | 'moderate' | 'intense';
+    monthsReduced: number;
+    additionalMonthlySaving: number;
+    suggestions: string[];
+    description: string;
+  }[];
+  tips: string[];
+  generatedAt: string;
 }
 

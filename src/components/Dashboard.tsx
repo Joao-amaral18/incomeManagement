@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
-import { TrendingUp, Calendar } from 'lucide-react'
+import { TrendingUp, Calendar, Target } from 'lucide-react'
 import { useState } from 'react'
 import { ExpenseForm } from './ExpenseForm'
 
@@ -13,7 +13,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'
 export function Dashboard() {
   const { getTotalMonthly, getExpensesByCategory, getUpcomingExpenses, getCurrentMonthIncome } = useExpenseStore()
   const [isFormOpen, setIsFormOpen] = useState(false)
-  
+
   const total = getTotalMonthly()
   const monthlyIncome = getCurrentMonthIncome()
   const expensesByCategory = getExpensesByCategory()
@@ -178,10 +178,19 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Botão Novo Gasto */}
-      <div className="flex justify-center">
+      {/* Quick Actions */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button onClick={() => setIsFormOpen(true)} size="lg">
           New Expense
+        </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          className="flex items-center gap-2"
+          title="Acesse via aba 'Planejador' na navegação"
+        >
+          <Target className="h-4 w-4" />
+          Planejador de Compras
         </Button>
       </div>
 

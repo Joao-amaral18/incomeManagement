@@ -41,11 +41,11 @@ function App() {
       <SignedIn>
         <div className="min-h-screen bg-background">
           {/* Header */}
-          <header className="border-b">
-            <div className="container mx-auto px-4 py-4">
+          <header className="border-b border-border">
+            <div className="container mx-auto px-4 py-3.5">
               <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">💰 Gerenciador de Despesas Fixas</h1>
-                <div className="flex items-center gap-2">
+                <h1 className="text-xl font-semibold">💰 Income Manager</h1>
+                <div className="flex items-center gap-1">
                   <Auth />
                   <Button
                     variant="ghost"
@@ -60,48 +60,48 @@ function App() {
           </header>
 
       {/* Navigation */}
-      <nav className="border-b bg-muted/40">
+      <nav className="border-b border-border bg-background">
         <div className="container mx-auto px-4">
-          <div className="flex gap-2 overflow-x-auto">
+          <div className="flex gap-1 overflow-x-auto">
             <Button
               variant={activeTab === 'dashboard' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('dashboard')}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary"
             >
               <Home className="h-4 w-4" />
-              Dashboard
+              <span className="hidden sm:inline">Dashboard</span>
             </Button>
             <Button
               variant={activeTab === 'expenses' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('expenses')}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary"
             >
               <List className="h-4 w-4" />
-              Gastos
+              <span className="hidden sm:inline">Expenses</span>
             </Button>
             <Button
               variant={activeTab === 'income' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('income')}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary"
             >
               <DollarSign className="h-4 w-4" />
-              Renda
+              <span className="hidden sm:inline">Income</span>
             </Button>
             <Button
               variant={activeTab === 'ai' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('ai')}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary"
             >
               <Sparkles className="h-4 w-4" />
-              Análise IA
+              <span className="hidden sm:inline">Analysis</span>
             </Button>
             <Button
               variant={activeTab === 'notifications' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('notifications')}
-              className="flex items-center gap-2 relative"
+              className="flex items-center gap-2 rounded-none border-b-2 border-transparent data-[active]:border-primary relative"
             >
               <Bell className="h-4 w-4" />
-              Notificações
+              <span className="hidden sm:inline">Notifications</span>
               {unreadNotifications > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {unreadNotifications}
@@ -122,9 +122,9 @@ function App() {
           </main>
 
           {/* Footer */}
-          <footer className="border-t mt-12 py-6">
-            <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-              Sistema de Gerenciamento de Despesas Fixas • Versão 1.0
+          <footer className="border-t border-border mt-12 py-4">
+            <div className="container mx-auto px-4 text-center text-xs text-muted-foreground">
+              Income Management System • v1.0
             </div>
           </footer>
         </div>

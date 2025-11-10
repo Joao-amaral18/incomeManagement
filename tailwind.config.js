@@ -12,6 +12,12 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontSize: {
+        xs: ["12px", { lineHeight: "16px" }],
+        sm: ["13px", { lineHeight: "20px" }],
+        base: ["14px", { lineHeight: "20px" }],
+        lg: ["16px", { lineHeight: "24px" }],
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

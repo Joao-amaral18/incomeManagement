@@ -39,64 +39,55 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Resumo Financeiro */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Renda Mensal
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4 text-green-600" />
+              Monthly Income
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-green-600">{formatCurrency(monthlyIncome)}</div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Renda do mês atual
-            </p>
+            <div className="text-3xl font-semibold text-green-600">{formatCurrency(monthlyIncome)}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Despesas Mensais
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4 text-red-600" />
+              Monthly Expenses
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-red-600">{formatCurrency(total)}</div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Total de despesas fixas ativas
-            </p>
+            <div className="text-3xl font-semibold text-red-600">{formatCurrency(total)}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Saldo
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4" />
+              Balance
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-4xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-3xl font-semibold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {formatCurrency(balance)}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              {balance >= 0 ? 'Saldo positivo' : 'Saldo negativo'}
-            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Gráficos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Distribuição por Categoria</CardTitle>
+            <CardTitle className="text-base">Expenses by Category</CardTitle>
           </CardHeader>
           <CardContent>
             {pieData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
                     data={pieData}
@@ -104,7 +95,7 @@ export function Dashboard() {
                     cy="50%"
                     labelLine={false}
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
+                    outerRadius={75}
                     fill="#8884d8"
                     dataKey="value"
                   >
@@ -116,8 +107,8 @@ export function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                Nenhum dado para exibir
+              <div className="h-[280px] flex items-center justify-center text-muted-foreground text-sm">
+                No data to display
               </div>
             )}
           </CardContent>
@@ -125,21 +116,21 @@ export function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Gastos por Categoria</CardTitle>
+            <CardTitle className="text-base">Spending Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
             {barData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={barData}>
                   <XAxis dataKey="category" />
                   <YAxis />
                   <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                  <Bar dataKey="total" fill="#8884d8" />
+                  <Bar dataKey="total" fill="#0088FE" />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                Nenhum dado para exibir
+              <div className="h-[280px] flex items-center justify-center text-muted-foreground text-sm">
+                No data to display
               </div>
             )}
           </CardContent>
@@ -149,9 +140,9 @@ export function Dashboard() {
       {/* Próximos Vencimentos */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            Próximos 7 Vencimentos
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Calendar className="h-4 w-4" />
+            Upcoming Payments (7 days)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -162,26 +153,26 @@ export function Dashboard() {
                 return (
                   <div
                     key={expense.id}
-                    className="flex items-center justify-between p-3 rounded-lg border"
+                    className="flex items-center justify-between p-3 rounded border"
                   >
                     <div>
-                      <div className="font-medium">{expense.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {formatCurrency(expense.value)} • Dia {expense.dueDay}
+                      <div className="text-sm font-medium">{expense.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {formatCurrency(expense.value)} • Day {expense.dueDay}
                       </div>
                     </div>
                     <Badge
                       variant={daysUntil === 0 ? 'destructive' : daysUntil <= 3 ? 'default' : 'secondary'}
                     >
-                      {daysUntil === 0 ? 'Hoje' : `${daysUntil} dias`}
+                      {daysUntil === 0 ? 'Today' : `${daysUntil}d`}
                     </Badge>
                   </div>
                 )
               })}
             </div>
           ) : (
-            <div className="text-center text-muted-foreground py-8">
-              Nenhum vencimento nos próximos 7 dias
+            <div className="text-center text-muted-foreground text-sm py-8">
+              No upcoming payments in the next 7 days
             </div>
           )}
         </CardContent>
@@ -190,7 +181,7 @@ export function Dashboard() {
       {/* Botão Novo Gasto */}
       <div className="flex justify-center">
         <Button onClick={() => setIsFormOpen(true)} size="lg">
-          Novo Gasto
+          New Expense
         </Button>
       </div>
 

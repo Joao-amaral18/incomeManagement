@@ -81,21 +81,21 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
       <DialogContent>
         <DialogClose onClose={() => onOpenChange(false)} />
         <DialogHeader>
-          <DialogTitle>{expense ? 'Editar Gasto' : 'Novo Gasto'}</DialogTitle>
+          <DialogTitle className="text-lg">{expense ? 'Edit Expense' : 'New Expense'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-sm font-medium mb-1">Nome da despesa *</label>
+            <label className="block text-xs font-medium mb-1.5">Name *</label>
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              placeholder="Ex: Netflix"
+              placeholder="e.g., Netflix"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Valor (R$) *</label>
+            <label className="block text-xs font-medium mb-1.5">Amount (R$) *</label>
             <Input
               type="number"
               step="0.01"
@@ -108,7 +108,7 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Dia do vencimento (1-31) *</label>
+            <label className="block text-xs font-medium mb-1.5">Due Day (1-31) *</label>
             <Input
               type="number"
               min="1"
@@ -121,7 +121,7 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Categoria *</label>
+            <label className="block text-xs font-medium mb-1.5">Category *</label>
             <Select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value as Category })}
@@ -136,25 +136,25 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Forma de pagamento</label>
+            <label className="block text-xs font-medium mb-1.5">Payment Method</label>
             <Input
               value={formData.paymentMethod}
               onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-              placeholder="Ex: Cartão de crédito"
+              placeholder="e.g., Credit card"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Observações</label>
+            <label className="block text-xs font-medium mb-1.5">Notes</label>
             <Input
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Notas adicionais"
+              placeholder="Additional notes"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Data de término</label>
+            <label className="block text-xs font-medium mb-1.5">End Date</label>
             <Input
               type="date"
               value={formData.endDate}
@@ -168,18 +168,20 @@ export function ExpenseForm({ open, onOpenChange, expense }: ExpenseFormProps) {
               id="isActive"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="rounded"
+              className="rounded w-4 h-4"
             />
-            <label htmlFor="isActive" className="text-sm font-medium">
-              Ativo
+            <label htmlFor="isActive" className="text-xs font-medium">
+              Active
             </label>
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancelar
+          <div className="flex justify-end space-x-2 pt-2">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} size="sm">
+              Cancel
             </Button>
-            <Button type="submit">Salvar</Button>
+            <Button type="submit" size="sm">
+              Save
+            </Button>
           </div>
         </form>
       </DialogContent>
